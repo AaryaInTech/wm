@@ -1,0 +1,490 @@
+﻿1. Missing_Value_Treatment
+# Step 1: Import Libraries
+import pandas as pd
+import numpy as np
+
+
+# Step 2: Load Dataset
+data = pd.read_csv('your_dataset.csv')  # Replace with actual file name
+print("Original Data with Missing Values:")
+print(data.head())
+
+
+# Step 3: Detect Missing Values
+print("\nMissing Values Count:")
+print(data.isnull().sum())
+
+
+# Step 4: Drop rows with missing values (if required)
+data_dropna = data.dropna()
+print("\nData after dropping rows with missing values:")
+print(data_dropna.head())
+
+
+# Step 5: Fill missing values with mean (for numerical columns)
+data_fill_mean = data.copy()
+data_fill_mean.fillna(data.mean(numeric_only=True), inplace=True)
+print("\nData after filling missing values with mean:")
+print(data_fill_mean.head())
+
+
+# Step 6: Fill missing values with median
+data_fill_median = data.copy()
+data_fill_median.fillna(data.median(numeric_only=True), inplace=True)
+print("\nData after filling missing values with median:")
+print(data_fill_median.head())
+
+
+# Step 7: Fill missing values with mode
+data_fill_mode = data.copy()
+for column in data.columns:
+    data_fill_mode[column].fillna(data[column].mode()[0], inplace=True)
+print("\nData after filling missing values with mode:")
+print(data_fill_mode.head())
+
+
+# Step 8: Fill missing categorical values with a placeholder
+data_fill_placeholder = data.copy()
+data_fill_placeholder.fillna("Unknown", inplace=True)
+print("\nData after filling missing values with placeholder:")
+print(data_fill_placeholder.head())
+—-
+2. ##EDA
+# Step 1: Import Libraries
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+
+# Step 2: Load Dataset
+# Replace with your file name or path
+data = pd.read_csv('your_dataset.csv')  # e.g., 'Iris.csv', 'titanic.csv', etc.
+
+
+# Step 3: Basic Information
+print("Shape of Dataset:", data.shape)
+print("\nFirst 5 Rows:\n", data.head())
+print("\nDataset Info:\n")
+data.info()
+
+
+# Step 4: Statistical Summary
+print("\nStatistical Description:\n", data.describe())
+
+
+# Step 5: Checking Missing Values
+print("\nMissing Values:\n", data.isnull().sum())
+
+
+# Step 6: Checking for Duplicates
+print("\nDuplicate Rows:", data.duplicated().sum())
+
+
+# Step 7: Data Types
+print("\nData Types:\n", data.dtypes)
+
+
+# Step 8: Correlation Matrix
+plt.figure(figsize=(10, 6))
+sns.heatmap(data.corr(numeric_only=True), annot=True, cmap='coolwarm')
+plt.title("Correlation Matrix")
+plt.show()
+
+
+# Step 9: Count Plots for Categorical Columns
+categorical_columns = data.select_dtypes(include='object').columns
+
+
+for col in categorical_columns:
+    plt.figure(figsize=(6, 4))
+    sns.countplot(x=col, data=data)
+    plt.title(f"Count Plot for {col}")
+    plt.xticks(rotation=45)
+    plt.show()
+
+
+# Step 10: Histograms for Numerical Columns
+numerical_columns = data.select_dtypes(include=np.number).columns
+
+
+for col in numerical_columns:
+    plt.figure(figsize=(6, 4))
+    sns.histplot(data[col], kde=True, bins=30)
+    plt.title(f"Histogram for {col}")
+    plt.show()
+
+
+# Step 11: Box Plots for Outlier Detection
+for col in numerical_columns:
+    plt.figure(figsize=(6, 4))
+    sns.boxplot(x=data[col])
+    plt.title(f"Box Plot for {col}")
+    plt.show()
+
+
+—---
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+3. ##ELT
+
+
+import pandas as pd
+
+
+data = {
+    'ID': ['1', '2', '3', '4', '5','6'],
+    'Name': ['Laxmi', 'Krishna', 'Radha', 'Ram', 'Sita','Gita'],
+    'Age': ['20', '21', '22', '23', '24','25'],
+    'State': ['Maharashtra', 'Gujarat', 'Maharashtra', 'Punjab', 'Kerala','Kerala'],
+    'Sales':[700,600,500,400,300,200]
+}
+
+
+df = pd.DataFrame(data)
+print("Original DataFrame")
+print(df)
+
+
+#data flow Transformation
+df['Name_upper'] = df['Name'].str.upper()
+df[['ID', 'Name', 'Name_upper']]
+
+
+#multicast: create multiple copies of the data
+df_copy1 = df.copy()
+df_copy2 = df.copy()
+
+
+df_copy1['Sales'] = df_copy1['Sales'] * 1.1
+df_copy2['Age'] += df_copy2['Age'] 
+
+
+df_copy1
+
+
+df_copy2
+
+
+#conditional split: split the data into two parts based on some condition
+high_sales = df[df['Sales'] > 300]
+
+
+low_sales = df[df['Sales'] <= 300]
+
+
+high_sales
+
+
+low_sales
+
+
+#aggrigation: calculate the sum of sales
+total_sales = df['Sales'].sum()
+total_sales
+
+
+agg_sales = df.groupby('State')['Sales'].sum()
+
+
+agg_sales
+
+
+agg_sales1 = df.groupby('State')['Sales'].sum().reset_index()
+agg_sales1
+
+
+agg_sales1.sort_values('Sales', ascending=False)
+
+
+sorted_df = df.sort_values('Sales', ascending=True)
+sorted_df
+
+
+sorted_df = df.sort_values('Sales', ascending=False)
+sorted_df
+
+
+#derived column: calculate the sales percentage
+df['sales_category'] = ['High' if x > 300 else 'Low' for x in df['Sales']]
+df
+
+
+df['sales_category'] = df['Sales'].apply(lambda x: 'High' if x > 300 else 'Low')
+df
+ 
+
+
+
+
+
+
+—----
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+4. AIM : To treat missing values with different techniques in python
+
+
+import pandas as pd
+import numpy as np
+print('Hello')
+
+
+#Cell 1
+dataset = pd.read_excel('/content/Employee_Data.xls')
+
+
+#Cell 2
+dataset.isnull().sum()
+
+
+dataset
+
+
+x=dataset.iloc[:,3:6].values
+x
+
+
+from sklearn.impute import SimpleImputer
+imputer = SimpleImputer(missing_values = 'NaN', strategy = 'median')
+imputer = SimpleImputer().fit(x[:,1:3])
+x[:,1:3] = imputer.transform(x[:,1:3])
+print(x)
+
+
+from sklearn.impute import SimpleImputer
+imputer = SimpleImputer(missing_values = 'NaN', strategy='most_frequent')
+imputer = SimpleImputer().fit(x[:,1:3])
+x[:,1:3] = imputer.transform(x[:,1:3])
+print(x)
+
+
+
+
+
+
+—--
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+5. ## Naive Bayes
+import pandas as pd 
+import numpy as np
+import apyori
+
+
+# Note: Fix the file path escape sequence (use raw string or forward slashes)
+df = pd.read_csv(r'dataFiles\Day1.csv')  # or 'dataFiles/Day1.csv'
+
+
+# Display first 5 rows
+df.head(5)
+
+
+# Display last 5 rows
+df.tail()
+
+
+# Show dataframe shape
+df.shape
+
+
+# Prepare records for apriori algorithm
+records = []
+for i in range(0, 21):
+    records.append([str(df.values[i, j]) for j in range(0, 6)])
+
+
+# View the prepared records
+records
+
+
+# Run Apriori algorithm with specified parameters
+association_rules = apyori.apriori(
+    records, 
+    min_support=0.50, 
+    min_confidence=0.7, 
+    min_lift=1.2, 
+    min_length=2
+)
+association_results = list(association_rules)
+
+
+# View the association results
+association_results
+
+
+—-
+
+
+
+
+
+
+
+
+
+
+6. ##Decision Tree
+import os
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+
+
+# Importing the dataset
+dataset = pd.read_csv("dataFiles\\User_Data.csv")
+
+
+x = dataset.iloc[:, [2,3]].values
+x
+
+
+y = dataset.iloc[:, 4].values
+y
+
+
+# Splitting the dataset into the Training set and Test set
+from sklearn.model_selection import train_test_split
+x_train, x_test, y_train, y_test = train_test_split(x, y, test_size = 0.25, random_state = 0)
+
+
+# Feature Scaling
+from sklearn.preprocessing import StandardScaler
+sc = StandardScaler()
+x_train = sc.fit_transform(x_train)
+x_test = sc.transform(x_test)
+
+
+print(x_train)
+print(x_test)
+
+
+# Fitting Naive Bayes to the Training set
+from sklearn.naive_bayes import GaussianNB
+classifier = GaussianNB()
+classifier.fit(x_train, y_train)
+
+
+print(x_test)
+
+
+# Predicting the Test set results
+y_pred = classifier.predict(x_test)
+y_pred
+
+
+from sklearn.metrics import confusion_matrix
+cm = confusion_matrix(y_test, y_pred)
+cm
+
+
+y_pred = classifier.predict([[0.38358493 , 0.99784738]])
+print(y_pred)
+
+
+y_pred = classifier.predict([[-0.80480212 , 0.50496393]])
+print(y_pred)
