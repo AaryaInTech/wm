@@ -201,39 +201,30 @@ plt.show()
 
 8. Decision Tree Classification
 import pandas as pd
-from sklearn.tree import DecisionTreeClassifier, plot_tree
-from sklearn.model_selection import train_test_split
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.tree import DecisionTreeClassifier
 from sklearn.metrics import accuracy_score
-import matplotlib.pyplot as plt
+from sklearn.model_selection import train_test_split
 
+x = df[['target']] # Assuming you want a DataFrame with one column named 'target'
+y = df['target']
 
-# Load
-data = pd.read_csv('your_data.csv')
-X = data.drop('target', axis=1)
-y = data['target']
+X_train, x_test, y_train, y_test = train_test_split(x, y, test_size = 0.3)
 
+model = DecisionTreeClassifier()
+model.fit(X_train, y_train)
 
-# Split
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3)
+y_pred = model.predict(x_test)
+accuracy = accuracy_score(y_test, y_pred)
+print('Accuracy:', accuracy)
+X_train, x_test, y_train, y_test = train_test_split(x, y, test_size = 0.3)
 
+model = DecisionTreeClassifier()
+model.fit(X_train, y_train)
 
-# Model
-dtree = DecisionTreeClassifier()
-dtree.fit(X_train, y_train)
-
-
-# Predict
-y_pred = dtree.predict(X_test)
-
-
-print('Accuracy:', accuracy_score(y_test, y_pred))
-
-
-# Plot Tree
-plt.figure(figsize=(15,10))
-plot_tree(dtree, filled=True, feature_names=X.columns, class_names=True)
-plt.show()
-
+y_pred = model.predict(x_test)
+accuracy = accuracy_score(y_test, y_pred)
+print('Accuracy:', accuracy)
 
 
 
