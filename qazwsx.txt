@@ -7,15 +7,15 @@ data = pd.read_csv('your_data.csv')
 
 
 # Example transformations
-# 1. Rename columns
+# i. Rename columns
 data.rename(columns={'oldName': 'newName'}, inplace=True)
 
 
-# 2. Filter data
+# ii. Filter data
 filtered_data = data[data['column_name'] > 10]
 
 
-# 3. Create new columns
+# iii. Create new columns
 data['new_col'] = data['col1'] + data['col2']
 
 
@@ -152,16 +152,16 @@ from sklearn.impute import SimpleImputer
 data = pd.read_csv('your_data.csv')
 
 
-# 1. Fill missing with mean
+# i. Fill missing with mean
 imputer = SimpleImputer(strategy='mean')
 data['col_with_nan'] = imputer.fit_transform(data[['col_with_nan']])
 
 
-# 2. Fill with median
+# ii. Fill with median
 data['col_with_nan2'] = data['col_with_nan2'].fillna(data['col_with_nan2'].median())
 
 
-# 3. Drop rows with any missing value
+# iii. Drop rows with any missing value
 data_dropped = data.dropna()
 
 
@@ -269,6 +269,7 @@ plt.plot(X_test, y_pred, color='blue', linewidth=3)
 plt.xlabel('feature')
 plt.ylabel('target')
 plt.show()
+
 
 
 # Coefficient
