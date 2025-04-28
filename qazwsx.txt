@@ -1,0 +1,276 @@
+﻿1. Data Flow Transformations 
+import pandas as pd
+
+
+# Load CSV
+data = pd.read_csv('your_data.csv')
+
+
+# Example transformations
+# 1. Rename columns
+data.rename(columns={'oldName': 'newName'}, inplace=True)
+
+
+# 2. Filter data
+filtered_data = data[data['column_name'] > 10]
+
+
+# 3. Create new columns
+data['new_col'] = data['col1'] + data['col2']
+
+
+# Save transformed data
+filtered_data.to_csv('transformed_data.csv', index=False)
+
+
+
+
+2. Apriori Algorithm (Association Rules Mining)
+import pandas as pd
+from mlxtend.frequent_patterns import apriori, association_rules
+
+
+# Load transaction data
+data = pd.read_csv('market_data.csv')
+
+
+# One hot encoding (if needed)
+basket = data.groupby(['Transaction', 'Item'])['Item'].count().unstack().fillna(0)
+basket = basket.applymap(lambda x: 1 if x > 0 else 0)
+
+
+# Apply Apriori
+frequent_itemsets = apriori(basket, min_support=0.02, use_colnames=True)
+
+
+# Generate rules
+rules = association_rules(frequent_itemsets, metric="lift", min_threshold=1)
+print(rules)
+
+
+
+
+3. Naive Bayes Classification
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.naive_bayes import GaussianNB
+from sklearn.metrics import accuracy_score
+
+
+# Load data
+data = pd.read_csv('your_data.csv')
+X = data.drop('target', axis=1)
+y = data['target']
+
+
+# Split
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3)
+
+
+# Train model
+model = GaussianNB()
+model.fit(X_train, y_train)
+
+
+# Predict
+y_pred = model.predict(X_test)
+
+
+print('Accuracy:', accuracy_score(y_test, y_pred))
+
+
+
+
+4. K-Nearest Neighbors (KNN) Algorithm
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.metrics import accuracy_score
+
+
+# Load data
+data = pd.read_csv('your_data.csv')
+X = data.drop('target', axis=1)
+y = data['target']
+
+
+# Split
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3)
+
+
+# Train
+knn = KNeighborsClassifier(n_neighbors=5)
+knn.fit(X_train, y_train)
+
+
+# Predict
+y_pred = knn.predict(X_test)
+
+
+print('Accuracy:', accuracy_score(y_test, y_pred))
+
+
+
+
+
+
+5. Exploratory Data Analysis (EDA)
+import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+
+# Load data
+data = pd.read_csv('your_data.csv')
+
+
+# Basic info
+print(data.info())
+print(data.describe())
+print(data.isnull().sum())
+
+
+# Histograms
+data.hist(bins=30, figsize=(15,10))
+plt.show()
+
+
+# Correlation heatmap
+plt.figure(figsize=(10,8))
+sns.heatmap(data.corr(), annot=True, cmap='coolwarm')
+plt.show()
+
+
+
+
+6. Treat Missing Values
+import pandas as pd
+from sklearn.impute import SimpleImputer
+
+
+# Load data
+data = pd.read_csv('your_data.csv')
+
+
+# 1. Fill missing with mean
+imputer = SimpleImputer(strategy='mean')
+data['col_with_nan'] = imputer.fit_transform(data[['col_with_nan']])
+
+
+# 2. Fill with median
+data['col_with_nan2'] = data['col_with_nan2'].fillna(data['col_with_nan2'].median())
+
+
+# 3. Drop rows with any missing value
+data_dropped = data.dropna()
+
+
+
+
+7. K-Means Clustering
+import pandas as pd
+from sklearn.cluster import KMeans
+import matplotlib.pyplot as plt
+
+
+# Load data
+data = pd.read_csv('your_data.csv')
+
+
+# Select features
+X = data[['feature1', 'feature2']]  # adjust your features
+
+
+# KMeans
+kmeans = KMeans(n_clusters=3)
+kmeans.fit(X)
+
+
+# Add cluster label
+data['Cluster'] = kmeans.labels_
+
+
+# Visualize
+plt.scatter(X['feature1'], X['feature2'], c=data['Cluster'])
+plt.xlabel('feature1')
+plt.ylabel('feature2')
+plt.show()
+
+
+
+
+8. Decision Tree Classification
+import pandas as pd
+from sklearn.tree import DecisionTreeClassifier, plot_tree
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score
+import matplotlib.pyplot as plt
+
+
+# Load
+data = pd.read_csv('your_data.csv')
+X = data.drop('target', axis=1)
+y = data['target']
+
+
+# Split
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3)
+
+
+# Model
+dtree = DecisionTreeClassifier()
+dtree.fit(X_train, y_train)
+
+
+# Predict
+y_pred = dtree.predict(X_test)
+
+
+print('Accuracy:', accuracy_score(y_test, y_pred))
+
+
+# Plot Tree
+plt.figure(figsize=(15,10))
+plot_tree(dtree, filled=True, feature_names=X.columns, class_names=True)
+plt.show()
+
+
+
+
+9. Linear Regression
+import pandas as pd
+from sklearn.linear_model import LinearRegression
+from sklearn.model_selection import train_test_split
+import matplotlib.pyplot as plt
+
+
+# Load
+data = pd.read_csv('your_data.csv')
+X = data[['feature']]  # Single feature example
+y = data['target']
+
+
+# Split
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3)
+
+
+# Model
+model = LinearRegression()
+model.fit(X_train, y_train)
+
+
+# Predict
+y_pred = model.predict(X_test)
+
+
+# Plot
+plt.scatter(X_test, y_test, color='black')
+plt.plot(X_test, y_pred, color='blue', linewidth=3)
+plt.xlabel('feature')
+plt.ylabel('target')
+plt.show()
+
+
+# Coefficient
+print('Slope:', model.coef_)
+print('Intercept:', model.intercept_)
